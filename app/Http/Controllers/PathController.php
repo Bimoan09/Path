@@ -21,16 +21,11 @@ class PathController extends Controller
     public function storePath(Request $request)
     {
 
-        $request->validate([
-            'parent' => 'required',
-            'child' => 'required'
-          ]);
-
         $data = new Path;
         $data->parent = $request->parent;
-        $data->child = $request->child;
+        $data->child =  $request->child;
         $data->save();
-        return response()->json(['success'=>'Product saved successfully.']);
+        return response()->json(['success'=>'Path saved successfully.']);
     }
 
 }

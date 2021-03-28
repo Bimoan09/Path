@@ -44,7 +44,12 @@
                 <tbody>
                     @foreach ($data as $datas)
                     <tr>
+                        @if($datas->child == NULL)
+                        <td>{{$datas->parent}}</td>
+                    
+                        @elseif($datas->child != NULL)
                         <td>{{$datas->parent}} / {{$datas->child}}</td>
+                        @endif
                     </tr>
                     @endforeach
                 </tbody>
@@ -57,7 +62,7 @@
         </div>
     </br>
     </br>
-    
+
     <form id="modalFormData" name="modalFormData" class="form-horizontal">
         <div class="input-group mb-3">
           <div class="input-group-prepend">
@@ -69,13 +74,13 @@
         <div class="input-group-prepend">
           <span class="input-group-text">Child Name</span>
         </div>
-        <input type="text" class="form-control" id="child" name="child" placeholder="Child name" validate>
+        <input type="text" class="form-control" id="child" name="child" placeholder="Letter, number and space allowed" validate>
       </div>
 
       <button type="submit" class="btn btn-success btn-lg active" id="btn-save"><i class="fas fa-save"></i>Simpan</button>
 
       </form>
-
+    </div>
 <!--Import jQuery before export.js-->
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 
@@ -101,16 +106,13 @@ $.ajaxSetup({
 $('body').on('click', '#btn-save', function (event) {
     event.preventDefault()
 
-    var parent = $("#parent").val();
-    var child = $("#child").val();
+    // var parent = $("#parent").val();
+    // var child = $("#child").val();
     
     $.ajax({
+        data:$('#modalFormData').serialize(),
         url: "{{ route('path.store') }}",
         type: "POST",
-        data: {
-        parent: parent,
-        child: child,
-        },
         dataType: 'json',
 
         success: function (data) {
@@ -127,8 +129,6 @@ $('body').on('click', '#btn-save', function (event) {
       }, 1600);
         $('#modalFormData').trigger("reset");
         
-      
-       
         },
         error: function (data) {
             console.log('Error:', data);
