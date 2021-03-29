@@ -15,6 +15,8 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.1.8/css/fixedHeader.bootstrap.min.css" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.bootstrap.min.css" crossorigin="anonymous">
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> 
         <!-- Styles -->
         <style>
           .btn-success.active{
@@ -68,7 +70,8 @@
           <div class="input-group-prepend">
             <span class="input-group-text">Parent Name</span>
           </div>
-          <input type="text" class="form-control" id="parent" name="parent" placeholder="Parent name" validate>
+          <input type="text" class="form-control" name="parent" id="q" data-action="{{ route('path.search') }}">
+        
         </div>  
       <div class="input-group mb-3">
         <div class="input-group-prepend">
@@ -88,12 +91,13 @@
 <!--Data Table-->
 <script type="text/javascript"  src=" https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript"  src=" https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="https://repo.rachmat.id/jquery-ui-1.12.1/jquery-ui.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
 <script type="text/javascript">
 
-  var table = $('#example').DataTable();
+var table = $('#example').DataTable();
 
 $(function () {
 $.ajaxSetup({
@@ -105,10 +109,6 @@ $.ajaxSetup({
 
 $('body').on('click', '#btn-save', function (event) {
     event.preventDefault()
-
-    // var parent = $("#parent").val();
-    // var child = $("#child").val();
-    
     $.ajax({
         data:$('#modalFormData').serialize(),
         url: "{{ route('path.store') }}",
@@ -118,11 +118,11 @@ $('body').on('click', '#btn-save', function (event) {
         success: function (data) {
         
         Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'Data Tersimpan',
-        showConfirmButton: false,
-        timer: 1500
+            position: 'top-end',
+            icon: 'success',
+            title: 'Data Tersimpan',
+            showConfirmButton: true,
+            timer: 1500
         })
         setTimeout(function () {
         location.reload(true);
@@ -137,6 +137,19 @@ $('body').on('click', '#btn-save', function (event) {
     });
 });
 
+$('#q').each(function() {
+        var $this = $(this);
+        var src = $this.data('action');
+
+        $this.autocomplete({
+            source: src,
+            minLength: 1,
+            select: function(event, ui) {
+                $this.val(ui.item.value);
+                $('#id').val(ui.item.id);
+            }
+        });
+    });
 
 </script>
 

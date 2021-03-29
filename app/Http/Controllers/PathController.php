@@ -28,4 +28,15 @@ class PathController extends Controller
         return response()->json(['success'=>'Path saved successfully.']);
     }
 
+    public function selectSearch(Request $request)
+    {
+
+       
+        $search = $request->get('term');
+      
+        $result = Path::where('parent', 'LIKE', '%'. $search. '%')->get(['id', 'parent as value']);
+
+        return response()->json($result);
+    }
+
 }
